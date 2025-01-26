@@ -1,0 +1,81 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zoom Video SDK Standalone App</title>
+    <script src="https://source.zoom.us/videosdk/zoom-video-1.9.8.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        #video-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f0f0f0;
+        }
+        #zoom-video {
+            width: 640px;
+            height: 360px;
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <video id="zoom-video" autoplay playsinline muted></video>
+    </div>
+    <script>
+        const ZoomVideo = window.WebVideoSDK.default;
+alert('zoom');
+        if (ZoomVideo) {
+            console.log('Zoom SDK initialized:', ZoomVideo);
+
+            // Create the Zoom Video SDK Client
+            const client = ZoomVideo.createClient();
+
+            // Initialize the client
+            client.init('en-US', 'Global', { patchJsMedia: true }).then(() => {
+                console.log('Client initialized.');
+
+                // Replace with your own session details
+                const sessionName = 'ultraTest';
+                const videoSDKJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiQ05jSjRTWkNhVmFwUTROeTVkQUFwQkJDNzhxY2NUSmhkTTFOIiwicm9sZV90eXBlIjoxLCJ0cGMiOiJ1bHRyYVRlc3QiLCJpYXQiOjE3Mzc4ODcyNTcsImV4cCI6MTczNzg5MDg1N30.UiRdMbTL8vCcCUrjmxz8SZ7fTHuCXfzG396ysIOLqrk'; // Replace with your Zoom SDK JWT
+                const userName = 'Puneet';
+              //https://developers.zoom.us/docs/video-sdk/auth/#generate-a-video-sdk-jwt
+                return client.join(sessionName, videoSDKJWT, userName, 'temp');
+            }).then(() => {
+                console.log('Successfully joined the session.');
+
+                // Access the media stream
+                const stream = client.getMediaStream();
+                const videoElement = document.getElementById('zoom-video');
+
+                // Start video with a video element
+                stream.startVideo({ videoElement }).then(() => {
+                    console.log('Video started.');
+                    // Render the video stream
+                    stream.renderVideo(videoElement, client.getCurrentUserInfo().userId, 640, 360, 0);
+                }).catch(err => {
+                    console.error('Error starting video:', err);
+                });
+
+                // Start audio
+                stream.startAudio().then(() => {
+                    console.log('Audio started.');
+                }).catch(err => {
+                    console.error('Error starting audio:', err);
+                });
+            }).catch(err => {
+                console.error('Error joining session:', err);
+            });
+        } else {
+            console.error('Zoom SDK not loaded.');
+        }
+    </script>
+</body>
+</html>
