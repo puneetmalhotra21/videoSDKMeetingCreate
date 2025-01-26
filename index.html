@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -27,11 +27,12 @@
 </head>
 <body>
     <div id="video-container">
-        <video id="zoom-video" autoplay playsinline muted></video>
+        <!-- Create a canvas element here to render the video -->
+        <canvas id="zoom-video" width="640" height="360"></canvas>
     </div>
     <script>
         const ZoomVideo = window.WebVideoSDK.default;
-alert('zoom');
+
         if (ZoomVideo) {
             console.log('Zoom SDK initialized:', ZoomVideo);
 
@@ -42,24 +43,23 @@ alert('zoom');
             client.init('en-US', 'Global', { patchJsMedia: true }).then(() => {
                 console.log('Client initialized.');
 
-                // Replace with your own session details
                 const sessionName = 'ultraTesting';
                 const videoSDKJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiQ05jSjRTWkNhVmFwUTROeTVkQUFwQkJDNzhxY2NUSmhkTTFOIiwicm9sZV90eXBlIjoxLCJ0cGMiOiJ1bHRyYVRlc3RpbmciLCJpYXQiOjE3Mzc4OTEyMzcsImV4cCI6MTczNzg5NDgzN30.o2l_MUu4MTOEB4OzOpFjt18AlvuJqMOfRM0Hp-WBXpk'; // Replace with your Zoom SDK JWT
                 const userName = 'Puneet';
-              //https://developers.zoom.us/docs/video-sdk/auth/#generate-a-video-sdk-jwt
+
                 return client.join(sessionName, videoSDKJWT, userName, 'temp');
             }).then(() => {
                 console.log('Successfully joined the session.');
 
                 // Access the media stream
                 const stream = client.getMediaStream();
-                const videoElement = document.getElementById('zoom-video');
+                const canvasElement = document.getElementById('zoom-video');
 
-                // Start video with a video element
-                stream.startVideo({ videoElement }).then(() => {
+                // Start video with a canvas element
+                stream.startVideo({ videoElement: canvasElement }).then(() => {
                     console.log('Video started.');
-                    // Render the video stream
-                    stream.renderVideo(videoElement, client.getCurrentUserInfo().userId, 640, 360, 0);
+                    // Render the video stream to the canvas
+                    stream.renderVideo(canvasElement, client.getCurrentUserInfo().userId, 640, 360, 0);
                 }).catch(err => {
                     console.error('Error starting video:', err);
                 });
