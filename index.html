@@ -43,8 +43,8 @@ alert('zoom');
                 console.log('Client initialized.');
 
                 // Replace with your own session details
-                const sessionName = 'ultraTest';
-                const videoSDKJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiQ05jSjRTWkNhVmFwUTROeTVkQUFwQkJDNzhxY2NUSmhkTTFOIiwicm9sZV90eXBlIjoxLCJ0cGMiOiJ1bHRyYVRlc3QiLCJpYXQiOjE3Mzc4ODcyNTcsImV4cCI6MTczNzg5MDg1N30.UiRdMbTL8vCcCUrjmxz8SZ7fTHuCXfzG396ysIOLqrk'; // Replace with your Zoom SDK JWT
+                const sessionName = 'ultraTesting';
+                const videoSDKJWT = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHBfa2V5IjoiQ05jSjRTWkNhVmFwUTROeTVkQUFwQkJDNzhxY2NUSmhkTTFOIiwicm9sZV90eXBlIjoxLCJ0cGMiOiJ1bHRyYVRlc3RpbmciLCJpYXQiOjE3Mzc4OTEyMzcsImV4cCI6MTczNzg5NDgzN30.o2l_MUu4MTOEB4OzOpFjt18AlvuJqMOfRM0Hp-WBXpk'; // Replace with your Zoom SDK JWT
                 const userName = 'Puneet';
               //https://developers.zoom.us/docs/video-sdk/auth/#generate-a-video-sdk-jwt
                 return client.join(sessionName, videoSDKJWT, userName, 'temp');
