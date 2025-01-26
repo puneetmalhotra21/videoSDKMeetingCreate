@@ -18,6 +18,11 @@
             height: 100vh;
             background-color: #f0f0f0;
         }
+        #zoom-video {
+            width: 640px;
+            height: 360px;
+            background-color: black;
+        }
         canvas {
             width: 640px;
             height: 360px;
@@ -27,8 +32,10 @@
 </head>
 <body>
     <div id="video-container">
-        <!-- Create a canvas element to render the video -->
+        <!-- Create a canvas element to render the video for non-Chromium browsers -->
         <canvas id="zoom-video" width="640" height="360"></canvas>
+        <!-- Create a video element for Chromium browsers -->
+        <video id="zoom-video-video" width="640" height="360" autoplay playsinline muted></video>
     </div>
     <script>
         const ZoomVideo = window.WebVideoSDK.default;
@@ -53,13 +60,16 @@
 
                 // Access the media stream
                 const stream = client.getMediaStream();
-                const canvasElement = document.getElementById('zoom-video');
+                
+                // Select the correct video element based on browser
+                const isChromium = /Chrome|Chromium|CrMo/.test(navigator.userAgent) && !/Edge/.test(navigator.userAgent);
+                const videoElement = isChromium ? document.getElementById('zoom-video-video') : document.getElementById('zoom-video');
 
-                // Start video with a canvas element
-                stream.startVideo({ videoElement: canvasElement }).then(() => {
+                // Start video with the selected element (canvas or video)
+                stream.startVideo({ videoElement }).then(() => {
                     console.log('Video started.');
-                    // Render the video stream to the canvas
-                    stream.renderVideo(canvasElement, client.getCurrentUserInfo().userId, 640, 360, 0);
+                    // Render the video stream
+                    stream.renderVideo(videoElement, client.getCurrentUserInfo().userId, 640, 360, 0);
                 }).catch(err => {
                     console.error('Error starting video:', err);
                 });
